@@ -14,26 +14,42 @@ export const fetchCurrencyFail = error => ({
     error
 })
 
-export const fetchCurrencyData = () => async dispatch => {
-    //let timerId
-    //clearTimeout(timerId)
+async function getData() {
+    const response = await fetch(
+        'https://openexchangerates.org/api/latest.json?app_id=8d3fa2e40a7840e8936076a76ecb4a38'
+    )
+    const data = await response.json()
+    return data
+}
+
+export const updateCurrencyData = () => dispatch => {
     dispatch(fetchCurrencyStart())
 
-    async function getData() {
-        const response = await fetch(
-            'https://openexchangerates.org/api/latest.json?app_id=e4e3a015babf461b9e6242d679e5e281'
-        )
-        const data = await response.json()
-        console.log('data', data)
-        return data
-    }
+    getData()
+        .then(response => {
+            dispatch(fetchCurrencySuccess(response.rates, response.base))
+        })
+        .catch(err => dispatch(fetchCurrencyFail(err)))
+}
 
-    try {
-        const response = await getData()
-        // call fetchCurrencyData with settimout
-        // timerId = setTimeout(dispatch(fetchCurrencyData()), 60000)
-        dispatch(fetchCurrencySuccess(response.rates, response.base))
-    } catch (err) {
-        dispatch(fetchCurrencyFail(err))
-    }
+export const fetchData = () => dispatch => {
+    getData()
+        .then(response => {
+            dispatch(fetchCurrencySuccess(response.rates, response.base))
+        })
+        .catch(err => dispatch(fetchCurrencyFail(err)))
+}
+
+export const fetchCurrencyData = () => dispatch => {
+    dispatch(fetchCurrencyStart())
+
+    getData()
+        .then(response => {
+            setInterval(() => {
+                dispatch(fetchData())
+            }, 10000)
+
+            dispatch(fetchCurrencySuccess(response.rates, response.base))
+        })
+        .catch(err => dispatch(fetchCurrencyFail(err)))
 }

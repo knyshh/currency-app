@@ -1,7 +1,9 @@
 import * as actions from '../actions/actionTypes'
 
 const initialState = {
-    loading: false
+    loading: false,
+    rates: {},
+    base: ''
 }
 
 const isFetchingCurrencyReducer = (state = initialState, action) => {

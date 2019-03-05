@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Preloader from './components/Preloader'
@@ -22,16 +22,18 @@ class CurrencyLayout extends Component {
     }
 
     componentDidMount() {
-        this.handleUpdate()
-    }
-
-    handleUpdate = () => {
         const { onFetchedCurrency } = this.props
         onFetchedCurrency()
     }
 
+    handleUpdate = () => {
+        const { onUpdateCurrency } = this.props
+        onUpdateCurrency()
+    }
+
     handleAddCurrency = e => {
         if (e.target.checked) {
+            e.persist()
             this.setState(prevState => ({
                 baseCurrency: {
                     ...prevState.baseCurrency,
@@ -39,16 +41,17 @@ class CurrencyLayout extends Component {
                 }
             }))
         } else {
+            e.persist()
             this.setState(prevState => {
                 const newState = Object.keys(prevState.baseCurrency)
                     .filter(key => key !== e.target.value)
-                    .reduce((result, current) => {
-                        // result[current] = prevState.baseCurrency[current]
-                        return {
+                    .reduce(
+                        (result, current) => ({
                             ...result,
                             [current]: prevState.baseCurrency[current]
-                        }
-                    }, {})
+                        }),
+                        {}
+                    )
                 return {
                     baseCurrency: newState
                 }
@@ -60,9 +63,7 @@ class CurrencyLayout extends Component {
         const { loading, rates, base } = this.props
         const { baseCurrency, additionalCurrencies } = this.state
 
-        // console.log('loading', loading, rates, base)
-
-        return rates && base ? (
+        return (
             <div className="App">
                 {loading ? (
                     <Preloader />
@@ -70,7 +71,7 @@ class CurrencyLayout extends Component {
                     <div className="currencyLayout">
                         <Header base={base} />
 
-                        <CurrencyList baseCurrency={baseCurrency} rates={rates} base={base} />
+                        <CurrencyList baseCurrency={baseCurrency} rates={rates} />
 
                         <AdditionalCurrency
                             onAddCurrency={this.handleAddCurrency}
@@ -87,13 +88,14 @@ class CurrencyLayout extends Component {
                     </div>
                 )}
             </div>
-        ) : null
+        )
     }
 }
 
 CurrencyLayout.propTypes = {
     loading: PropTypes.bool.isRequired,
     onFetchedCurrency: PropTypes.func.isRequired,
+    onUpdateCurrency: PropTypes.func.isRequired,
     rates: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.number),
@@ -110,7 +112,8 @@ const mapStateToProps = state => ({
     base: state.currency.base
 })
 const mapDispatchToProps = {
-    onFetchedCurrency: actions.fetchCurrencyData
+    onFetchedCurrency: actions.fetchCurrencyData,
+    onUpdateCurrency: actions.updateCurrencyData
 }
 
 export default connect(
