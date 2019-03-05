@@ -1,0 +1,19 @@
+.additionalCurrencyList {
+  max-width: 320px;
+  margin: 0 auto 9rem auto;
+  text-align: center;
+
+  &__title {
+    color: var(--pink);
+    font-size: 1.8rem;
+    text-align: center;
+    padding-bottom: 2rem;
+  }
+  &__item {
+    margin-bottom: 1rem;
+  }
+  &__label {
+    color: var(--primaryOrange)
+  }
+
+}

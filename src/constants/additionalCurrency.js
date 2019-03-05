@@ -1,0 +1,6 @@
+const ADDITIONAL_CURRENCIES = {
+    CAD: 'CAD',
+    JPY: 'JPY'
+}
+
+export default ADDITIONAL_CURRENCIES

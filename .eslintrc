@@ -1,0 +1,71 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
+  "plugins": [
+    "prettier",
+    "import"
+  ],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-console": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/setupTests.js",
+          "**/*.test.js",
+          "**/*.spec.js"
+        ]
+      }
+    ],
+    "require-await": "error",
+    "no-return-await": "error",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js"
+        ]
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 100,
+        "parser": "babylon",
+        "tabWidth": 4,
+        "bracketSpacing": true,
+        "singleQuote": true,
+        "semi": false
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "import/no-named-as-default": "off",
+    "import/prefer-default-export": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "config/**/*.js",
+        "scripts/**/*.js"
+      ],
+      "rules": {
+        "global-require": "off",
+        "prefer-destructuring": "off",
+        "no-param-reassign": "off",
+        "import/no-dynamic-require": "off",
+        "no-use-before-define": "off",
+        "consistent-return": "off"
+      }
+    }
+  ]
+}
